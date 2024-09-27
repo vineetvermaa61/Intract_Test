@@ -8,9 +8,9 @@ Backend:
 Database Connection: Configured MongoDB connection in config/database.js using Mongoose.
 Data Model: Created a notification schema in models/schema.js to store notification details.
 API Endpoints:
-Implemented POST /api/v1/notifications/send for sending notifications to specific users or broadcasting to all users.
-Implemented POST /api/v1/notifications/read for marking notifications as read.
-Implemented GET /api/v1/notifications/{userId} for fetching notifications for a specific user.
+Implemented POST /api/notifications/send for sending notifications to specific users or broadcasting to all users.
+Implemented POST /api/notifications/read for marking notifications as read.
+Implemented GET /api/notifications/{userId} for fetching notifications for a specific user.
 WebSocket Implementation: Set up WebSocket in index.js for real-time communication, enabling instant delivery of notifications to connected clients.
 Frontend:
 
