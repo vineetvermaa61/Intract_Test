@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Notifications</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #notifications {
+            margin-top: 20px;
+            height: auto;
+            min-height: 100px; /* Ensure container is tall enough */
+        }
+        .notification {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            color: black; /* Ensure text is visible */
+            font-size: 16px;
+            z-index: 1000; /* Ensure it's visible */
+        }
+        .timestamp {
+            font-size: 0.8em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Notifications</h1>
+    <div id="notifications"></div>
+
+    <script>
+        // Establish WebSocket connection
+        const socket = new WebSocket("ws://localhost:4000");
+
+        // Connection opened
+        socket.addEventListener('open', function (event) {
+            console.log('WebSocket connection established.');
+            socket.send(JSON.stringify({ type: 'ping' })); // Keep connection alive
+        });
+
+        // Listen for messages (incoming notifications)
+        socket.addEventListener('message', function (event) {
+            console.log('New notification:', event.data);
+            const notification = JSON.parse(event.data);
+
+            // Debugging: Check if the notification data is correct
+            console.log('Notification data:', notification);
+
+            // Create a new div element for the notification
+            const notificationDiv = document.createElement('div');
+            notificationDiv.className = 'notification';
+
+            // Add message and timestamp
+            notificationDiv.innerHTML = `
+                <div>${notification.message}</div>
+                <div class="timestamp">${new Date(notification.timestamp).toLocaleString()}</div>
+            `;
+
+            // Debugging: Check if the div is created properly
+            console.log('Notification div:', notificationDiv);
+
+            // Append the notification div to the notifications container
+            const notificationsContainer = document.getElementById('notifications');
+            notificationsContainer.appendChild(notificationDiv);
+
+            // Debugging: Check if the notification is appended
+            console.log('Notification appended to container');
+        });
+
+        // Connection closed
+        socket.addEventListener('close', function (event) {
+            console.log('WebSocket connection closed.');
+        });
+
+        // Handle errors
+        socket.addEventListener('error', function (event) {
+            console.error('WebSocket error:', event);
+        });
+    </script>
+</body>
+</html>
